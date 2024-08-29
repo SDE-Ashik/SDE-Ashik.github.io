@@ -1,0 +1,138 @@
+<!-- 
+<!DOCTYPE html>
+<html>
+
+<head>
+  <!--
+    If you are serving your web app in a path other than the root, change the
+    href value below to reflect the base path you are serving from.
+
+    The path provided below has to start and end with a slash "/" in order for
+    it to work correctly.
+
+    For more details:
+    * https://developer.mozilla.org/en-US/docs/Web/HTML/Element/base
+
+    This is a placeholder for base href that will be replaced by the value of
+    the `--base-href` argument provided to `flutter build`.
+  -->
+  <base href="/">
+
+  <meta charset="UTF-8">
+  <meta content="IE=Edge" http-equiv="X-UA-Compatible">
+  <meta name="description" content="A new Flutter project.">
+
+  <!-- iOS meta tags & icons -->
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="apple-mobile-web-app-title" content="portfolio_website">
+  <link rel="apple-touch-icon" href="icons/Icon-192.png">
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/png" href="favicon.png" />
+
+  <title>portfolio_website</title>
+  <link rel="manifest" href="manifest.json">
+  <script src="download.js"></script>
+</head>
+
+<body>
+  <script src="https://cdn.jsdelivr.net/npm/pdfjs-dist@2.12.313/build/pdf.js" type="text/javascript"></script>
+  <script type="text/javascript">
+    pdfjsLib.GlobalWorkerOptions.workerSrc = "https://cdn.jsdelivr.net/npm/pdfjs-dist@2.12.313/build/pdf.worker.min.js";
+    pdfRenderOptions = {
+      cMapUrl: 'https://cdn.jsdelivr.net/npm/pdfjs-dist@2.12.313/cmaps/',
+      cMapPacked: true,
+    }
+  </script>
+  <!-- PDF.js scripts for rendering PDFs -->
+  <script src="//cdnjs.cloudflare.com/ajax/libs/pdf.js/2.11.338/pdf.min.js"></script>
+  <script type="text/javascript">
+    pdfjsLib.GlobalWorkerOptions.workerSrc = "//cdnjs.cloudflare.com/ajax/libs/pdf.js/2.11.338/pdf.worker.min.js";
+  </script>
+
+  <!-- Flutter Bootstrap -->
+  <script src="flutter_bootstrap.js" async></script>
+</body>
+
+</html> -->
+
+
+<!DOCTYPE html>
+<html>
+
+<head>
+  <base href="/">
+  <meta charset="UTF-8">
+  <meta content="IE=Edge" http-equiv="X-UA-Compatible">
+  <meta name="description" content="A new Flutter project.">
+
+  <!-- iOS meta tags & icons -->
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="apple-mobile-web-app-title" content="portfolio_website">
+  <link rel="apple-touch-icon" href="icons/Icon-192.png">
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/png" href="favicon.png" />
+
+  <title>portfolio_website</title>
+  <link rel="manifest" href="manifest.json">
+
+  <!-- PDF.js scripts for rendering PDFs -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.11.338/pdf.min.js"></script>
+  <script type="text/javascript">
+    pdfjsLib.GlobalWorkerOptions.workerSrc = "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.11.338/pdf.worker.min.js";
+  </script>
+</head>
+
+<body>
+  <!-- PDF Viewer Container -->
+  <div id="pdf-viewer" style="width: 100%; height: 100vh;"></div>
+
+  <!-- Flutter Bootstrap -->
+  <script src="flutter_bootstrap.js" async></script>
+
+  <script type="text/javascript">
+    // Function to load PDF
+    function loadPDF(url) {
+      var container = document.getElementById('pdf-viewer');
+      var loadingTask = pdfjsLib.getDocument(url);
+      loadingTask.promise.then(function (pdf) {
+        console.log('PDF loaded');
+        // Fetch the first page
+        pdf.getPage(1).then(function (page) {
+          console.log('Page loaded');
+          var scale = 1.5;
+          var viewport = page.getViewport({ scale: scale });
+
+          // Prepare canvas using PDF page dimensions
+          var canvas = document.createElement('canvas');
+          var context = canvas.getContext('2d');
+          canvas.height = viewport.height;
+          canvas.width = viewport.width;
+          container.appendChild(canvas);
+
+          // Render PDF page into canvas context
+          var renderContext = {
+            canvasContext: context,
+            viewport: viewport
+          };
+          var renderTask = page.render(renderContext);
+          renderTask.promise.then(function () {
+            console.log('Page rendered');
+          });
+        });
+      }, function (reason) {
+        console.error(reason);
+      });
+    }
+
+    // Load PDF when the page loads
+    window.onload = function () {
+      loadPDF('assets/ashik_skyscan.pdf');
+    }
+  </script>
+</body>
+
+</html>
